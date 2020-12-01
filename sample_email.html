@@ -1,0 +1,1324 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<!-- This xmlns code is needed for VML like that used in bullet proof buttons and backgrounds -->
+
+ %%[
+  
+    var @encryptedemail
+    set @encryptedemail = Base64Encode(emailaddr)
+    set @dataextension =_DataSourceName
+    set @creativeversion = creativeversion
+    
+    set @FirstName = Trim(ProperCase(FirstName))
+    set @LastName = Trim(ProperCase(LastName))
+  
+    set @hashedemail = sha256(emailaddr)
+    set @extratracking = concat("&triggermail_email_address=",@encryptedemail,"&he=",@hashedemail)
+  
+ set @ID = "S25"
+  
+  /*Find CF in CWS, replace with "YES" or "NO"*/
+  set @Is_CF = "YES"
+
+  /*Subjectline*/
+   set @subjectline = "Our 2019 MLB Gear Is Opening Day Ready"
+
+ /*Please replace TBD with US or CAEN or CAFR*/
+   set @country = "US"
+
+   if @creativeversion == "V1" then
+    set @tracking = "MMF|US|EM|Targeted|FP|BBS|u|app|bsball|1|SF|S25_0328_MLB_Opening_Day"
+   else
+ raiseError("Segmentcode not found.",true)
+   endif
+
+  /*Tracking*/
+  set @tracking = concat(@tracking,"|",jobID)
+
+   /*Omniture*/
+set @omniture = concat("RMID=",emailName_,"&RRID=",subscriberid,"&cid=",@tracking,@extratracking,"&et_cid=",jobid,"&et_rid=",subscriberid)
+
+  /*Adometry*/
+  set @adometry = concat("http://log.dmtry.com/redir/1/1/3638/",@tracking,"/0/1/140/0/940/1.ver?at=i&d=EOpen&img=1")
+  
+  set @main_url = concat("https://www.underarmour.com/en-us/mlb-fan-gear/g/314h","?",@omniture)
+
+  /*Preheader*/
+  set @preheader_text = concat("New Gear For All 30 Teams"," ----------------------------------------")
+  set @preheader_alias = "Preheader"
+
+ /*Secondary Image Section*/
+ /* If Secondary Image is used, set @secondary = "Y". if not, set @secondary = "TBD" or @secondary = "TBD" */
+
+ set @secondary = "Y"
+
+  if @secondary == "Y" then
+    set @sec_img = "http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/13/41e0393e-3527-4977-aadf-c278710b4b7c.jpg"
+    set @sec_alt = ""
+    set @sec_img_height = "275"
+    set @sec_url = concat("https://www.underarmour.com/en-us/footwear/baseball/g/3rfv","?",@omniture)
+    set @sec_line1 = "UA Yard Baseball Cleat"
+    set @sec_line2 = "Get Comfortable With Being Dangerous"
+    set @sec_cta = "SHOP NOW"
+  endif
+  
+  /*Tertiary Image Section*/
+ /* If Secondary Image is used, set @secondary = "Y". if not, set @tertiary = "TBD" or @tertiary = "TBD" */
+
+  set @tertiary = "TBD"
+  
+  if @tertiary == "Y" then
+      set @tertiary_img1 = "TBD"
+      set @tertiary_alt1 = ""
+      set @tertiary_img1_height = "206"
+      set @tertiary_url1 = concat("TBD","?",@omniture)
+      set @tertiary_cta1 = "TBD CTA"
+      
+      set @tertiary_img2 = "TBD"
+      set @tertiary_alt2 = ""
+      set @tertiary_img2_height = "206"
+      set @tertiary_url2 = concat("TBD","?",@omniture)
+      set @tertiary_cta2 = "TBD CTA"
+  endif
+  
+  if @secondary == "Y" and @tertiary == "Y" then
+   set @pad_bottom = "31"
+  elseif @secondary == "Y" then
+   set @pad_bottom = "60"
+  else
+   set @pad_bottom = "0"
+  endif
+
+ /* If the bottom image above the bottom nav has large white space, set @top_line as "Y", otherwise please set it as "N" or "TBD" */
+  set @top_line = "Y"
+
+ 
+
+  /*Promo*/
+  set @promo_alias = "Promo"
+  set @troopswap = lowercase(AttributeValue("troopswap"))
+  if @troopswap == "true" then
+   set @promo_text = "<strong>Your 10% discount for First Responders, Military &amp; Veterans is available both in&#8209;store&nbsp;&amp;&nbsp;online. LEARN&nbsp;MORE*</strong>"
+ set @promo_url = concat("https://www.underarmour.com/en-us/freedom","?",@omniture)
+  else
+    set @promo_text = "SHOP FAN GEAR"
+    set @promo_url = @main_url
+  endif
+
+ if @country == "US" then
+  if @troopswap == "true" then
+   set @disclaimer = "*See website for details. Promotional codes/offers are not valid on Borderfree sites. Under Armour reserves the right to cancel or modify this offer at&nbsp;any&nbsp;time."
+  elseif @troopswap == "false" or @troopswap == "unknown" then
+   set @disclaimer = "*See website for details. Under Armour reserves the right to cancel or modify this offer at&nbsp;any&nbsp;time."
+  endif
+ elseif @country == "CAEN" then
+  if @troopswap == "true" then
+   set @disclaimer = "*Shop now and get Free Standard Shipping on all orders over $75 for purchases from the CA website only. Minimum order amount must be met before shipping and handling charges or taxes are included. Promotional codes/offers are not valid on Borderfree sites. Under Armour reserves the right to cancel or modify this offer at&nbsp;any&nbsp;time."
+  elseif @troopswap == "false" or @troopswap == "unknown" then
+   set @disclaimer = "*Shop now and get Free Standard Shipping on all orders over $75 for purchases from the CA website only. Minimum order amount must be met before shipping and handling charges or taxes are included. Under Armour reserves the right to cancel or modify this offer at&nbsp;any&nbsp;time."
+  endif
+ elseif @country == "CAFR" then
+  set @disclaimer = "TBD"
+ endif
+ 
+ /* If except MI store locator, there are other MI dynamic code, please set  multi_MI as "Y", if not, set it "N". */
+ set @multi_MI = "N"
+
+  /*Proofing Info*/
+  if lowercase(AttributeValue('recip_type')) == "proof" then
+    set @subjectline = concat("[UA_",@ID,"-",@country,"-",@creativeversion,"-proof] ", @subjectline)
+  endif
+
+/*------No need to touch code below-------*/
+  /*country Links*/
+
+  /*United States (US)*/
+  if @country == "US" then
+  if @Is_CF == "YES" then
+  set @ua_logo_url = concat("http://www.underarmour.com/en-us/","?",@omniture,"&cff=true")
+  set @new_arrivals_url = concat("https://www.underarmour.com/en-us/new-arrivals/g/3272","?",@omniture,"&cff=true")
+  set @men_url = concat("http://www.underarmour.com/en-us/mens","?",@omniture,"&cff=true")
+  set @women_url = concat("http://www.underarmour.com/en-us/womens","?",@omniture,"&cff=true")
+  set @boys_url = concat("https://www.underarmour.com/en-us/boys/g/3f","?",@omniture,"&cff=true")
+  set @girls_url = concat("https://www.underarmour.com/en-us/girls/g/3i","?",@omniture,"&cff=true")
+  set @shoes_url = concat("http://www.underarmour.com/en-us/footwear","?",@omniture,"&cff=true")
+  set @technology_url = concat("https://www.underarmour.com/en-us/technology","?",@omniture,"&cff=true")
+  set @outlet_url = concat("https://www.underarmour.com/en-us/outlet/g/6","?",@omniture,"&cff=true")
+  set @free_ship_footer_url = concat("https://www.underarmour.com/en-us/","?",@omniture,"&cff=true")
+  set @free_return_footer_url = concat("http://underarmour.custhelp.com/app/answers/detail/a_id/1211","?",@omniture,"&cff=true")
+  set @ua_shop_url = concat("https://uashop.app.link/lKiGXYPxDF","?cff=true")
+  set @ua_gift_footer_url = concat("https://www.underarmour.com/en-us/gift-card-landing","?",@omniture,"&cff=true")
+  set @customer_service_url = concat("http://www.underarmour.com/en-us/customer-service","?",@omniture,"&cff=true")
+  set @store_locator_footer_url = concat("http://www.underarmour.com/en-us/find-a-store","?",@omniture,"&cff=true")
+  set @i_will_footer_url = concat("https://www.underarmour.com/en-us/","?",@omniture,"&cff=true")
+  set @unsubscribe_url = "https://account.underarmour.com/preferences?j=%%jobid%%"
+  set @privacy_policy_url = concat("https://www.underarmour.com/en-us/customer-service/security-and-privacy-policy","?",@omniture,"&cff=true")
+  else
+  set @ua_logo_url = concat("http://www.underarmour.com/en-us/","?",@omniture)
+  set @new_arrivals_url = concat("https://www.underarmour.com/en-us/new-arrivals/g/3272","?",@omniture)
+  set @men_url = concat("http://www.underarmour.com/en-us/mens","?",@omniture)
+  set @women_url = concat("http://www.underarmour.com/en-us/womens","?",@omniture)
+  set @boys_url = concat("https://www.underarmour.com/en-us/boys/g/3f","?",@omniture)
+  set @girls_url = concat("https://www.underarmour.com/en-us/girls/g/3i","?",@omniture)
+  set @shoes_url = concat("http://www.underarmour.com/en-us/footwear","?",@omniture)
+  set @technology_url = concat("https://www.underarmour.com/en-us/technology","?",@omniture)
+  set @outlet_url = concat("https://www.underarmour.com/en-us/outlet/g/6","?",@omniture)
+  set @free_ship_footer_url = concat("https://www.underarmour.com/en-us/","?",@omniture)
+  set @free_return_footer_url = concat("http://underarmour.custhelp.com/app/answers/detail/a_id/1211","?",@omniture)
+  set @ua_shop_url = "https://uashop.app.link/lKiGXYPxDF"
+  set @ua_gift_footer_url = concat("https://www.underarmour.com/en-us/gift-card-landing","?",@omniture)
+  set @customer_service_url = concat("http://www.underarmour.com/en-us/customer-service","?",@omniture)
+  set @store_locator_footer_url = concat("http://www.underarmour.com/en-us/find-a-store","?",@omniture)
+  set @i_will_footer_url = concat("https://www.underarmour.com/en-us/","?",@omniture)
+  set @unsubscribe_url = "https://account.underarmour.com/preferences?j=%%jobid%%"
+  set @privacy_policy_url = concat("https://www.underarmour.com/en-us/customer-service/security-and-privacy-policy","?",@omniture)
+  endif
+  
+  set @facebook_url = "https://www.facebook.com/Underarmour/"
+  set @twitter_url = "https://twitter.com/UnderArmour"
+  set @instagram_url = "https://www.instagram.com/underarmour/"
+  set @snapchat_url = "https://www.snapchat.com/add/underarmour"
+  
+   set @emailAddress = concat('Please add <a href="mailto:underarmour@emails.underarmour.com" target="_blank" style="text-decoration:none; color:#989898; white-space:nowrap !important;" alias="%%=v(@creativeversion)=%%_Sender Email Address">underarmour@emails.underarmour.com</a> to your&nbsp;address&nbsp;book. <br /> This email was sent to: <a href="mailto:',email_address,'" target="_blank" style="text-decoration:none; color:#989898;" alias="%%=v(@creativeversion)=%%_Recipient Email Address">',email_address,'</a>')
+
+  /*Canada English (CAEN)*/
+  elseif @country == "CAEN" then
+  if @Is_CF == "YES" then
+  set @ua_logo_url = concat("https://www.underarmour.com/en-ca","?",@omniture,"&cff=true")
+  set @new_arrivals_url = concat("https://www.underarmour.com/en-ca/new-arrivals/g/3272","?",@omniture,"&cff=true")
+  set @men_url = concat("https://www.underarmour.com/en-ca/mens","?",@omniture,"&cff=true")
+  set @women_url = concat("https://www.underarmour.com/en-ca/womens","?",@omniture,"&cff=true")
+  set @boys_url = concat("https://www.underarmour.com/en-ca/boys/g/3f","?",@omniture,"&cff=true")
+  set @girls_url = concat("https://www.underarmour.com/en-ca/girls/g/3i","?",@omniture,"&cff=true")
+  set @shoes_url = concat("https://www.underarmour.com/en-ca/footwear","?",@omniture,"&cff=true")
+  set @technology_url = concat("https://www.underarmour.com/en-ca/technology","?",@omniture,"&cff=true")
+  set @outlet_url = concat("https://www.underarmour.com/en-ca/outlet/g/6","?",@omniture,"&cff=true")
+  set @free_ship_footer_url = concat("https://www.underarmour.com/en-ca/","?",@omniture,"&cff=true")
+  set @free_return_footer_url = concat("https://www.underarmour.com/en-ca/customer-service/returns-and-exchanges","?",@omniture,"&cff=true")
+  set @cs_footer_url = concat("http://underarmour-canada.custhelp.com/","?",@omniture,"&cff=true")
+  set @store_locator_footer_url = concat("https://www.underarmour.com/en-ca/find-a-store","?",@omniture,"&cff=true")
+  set @i_will_footer_url = concat("https://www.underarmour.com/en-ca","?",@omniture,"&cff=true")
+  set @unsubscribe_url = "https://account.underarmour.com/preferences?j=%%jobid%%"
+  set @privacy_policy_url = concat("https://www.underarmour.com/en-ca/customer-service/security-and-privacy-policy","?",@omniture,"&cff=true")
+  else
+  set @ua_logo_url = concat("https://www.underarmour.com/en-ca","?",@omniture)
+  set @new_arrivals_url = concat("https://www.underarmour.com/en-ca/new-arrivals/g/3272","?",@omniture)
+  set @men_url = concat("https://www.underarmour.com/en-ca/mens","?",@omniture)
+  set @women_url = concat("https://www.underarmour.com/en-ca/womens","?",@omniture)
+  set @boys_url = concat("https://www.underarmour.com/en-ca/boys/g/3f","?",@omniture)
+  set @girls_url = concat("https://www.underarmour.com/en-ca/girls/g/3i","?",@omniture)
+  set @shoes_url = concat("https://www.underarmour.com/en-ca/footwear","?",@omniture)
+  set @technology_url = concat("https://www.underarmour.com/en-ca/technology","?",@omniture)
+  set @outlet_url = concat("https://www.underarmour.com/en-ca/outlet/g/6","?",@omniture)
+  set @free_ship_footer_url = concat("https://www.underarmour.com/en-ca/","?",@omniture)
+  set @free_return_footer_url = concat("https://www.underarmour.com/en-ca/customer-service/returns-and-exchanges","?",@omniture)
+  set @cs_footer_url = concat("http://underarmour-canada.custhelp.com/","?",@omniture)
+  set @store_locator_footer_url = concat("https://www.underarmour.com/en-ca/find-a-store","?",@omniture)
+  set @i_will_footer_url = concat("https://www.underarmour.com/en-ca","?",@omniture)
+  set @unsubscribe_url = "https://account.underarmour.com/preferences?j=%%jobid%%"
+  set @privacy_policy_url = concat("https://www.underarmour.com/en-ca/customer-service/security-and-privacy-policy","?",@omniture)
+endif
+ set @facebook_url = "https://www.facebook.com/UnderArmourCanada/"
+  set @twitter_url = "https://twitter.com/UnderArmour"
+  set @instagram_url = " https://www.instagram.com/underarmourca/"
+  set @snapchat_url = "https://www.snapchat.com/add/underarmour"
+ set @emailAddress = concat('Please add <a href="mailto:underarmour@emails.underarmour.com" target="_blank" style="text-decoration:none; color:#989898; white-space:nowrap !important;" alias="%%=v(@creativeversion)=%%_Sender Email Address">underarmour@emails.underarmour.com</a> to your&nbsp;address&nbsp;book. <br /> This email was sent to: <a href="mailto:',email_address,'" target="_blank" style="text-decoration:none; color:#989898;" alias="%%=v(@creativeversion)=%%_Recipient Email Address">',email_address,'</a>')
+
+  /*Canada French (CAFR)*/
+  elseif @country == "CAFR" then
+  if @Is_CF == "YES" then
+
+  set @ua_logo_url = concat("https://fr.underarmour.com/en-ca/","?",@omniture,"&cff=true")
+  set @new_arrivals_url = concat("https://fr.underarmour.com/en-ca/ua-new-arrivals","?",@omniture,"&cff=true")
+  set @men_url = concat("https://fr.underarmour.com/en-ca/mens","?",@omniture,"&cff=true")
+  set @women_url = concat("https://fr.underarmour.com/en-ca/womens","?",@omniture,"&cff=true")
+  set @boys_url = concat("https://fr.underarmour.com/en-ca/boys/","?",@omniture,"&cff=true")
+  set @girls_url = concat("https://fr.underarmour.com/en-ca/girls/","?",@omniture,"&cff=true")
+  set @shoes_url = concat("https://fr.underarmour.com/en-ca/footwear","?",@omniture,"&cff=true")
+  set @technology_url = concat("https://fr.underarmour.com/en-ca/2mi79/technologie","?",@omniture,"&cff=true")
+  set @outlet_url = concat("https://fr.underarmour.com/en-ca/outlet","?",@omniture,"&cff=true")
+  set @free_ship_footer_url = concat("https://fr.underarmour.com/en-ca/","?",@omniture,"&cff=true")
+  set @free_return_footer_url = concat("https://fr.underarmour.com/en-ca/services-clientèle/2mefp/Retours-et-échanges","?",@omniture,"&cff=true")
+  set @cs_footer_url = concat("http://underarmour-canada-fr.custhelp.com","?",@omniture,"&cff=true")
+  set @store_locator_footer_url = concat("https://fr.underarmour.com/en-ca/find-a-store","?",@omniture,"&cff=true")
+  set @i_will_footer_url = concat("https://fr.underarmour.com/en-ca/","?",@omniture,"&cff=true")
+  set @unsubscribe_url = "https://account.underarmour.com/preferences?j=%%jobid%%"
+  set @privacy_policy_url = concat("https://account.underarmour.com/privacy?locale=fr_ca","?",@omniture,"&cff=true")
+  else
+    set @ua_logo_url = concat("https://fr.underarmour.com/en-ca/","?",@omniture)
+  set @new_arrivals_url = concat("https://fr.underarmour.com/en-ca/ua-new-arrivals","?",@omniture)
+  set @men_url = concat("https://fr.underarmour.com/en-ca/mens","?",@omniture)
+  set @women_url = concat("https://fr.underarmour.com/en-ca/womens","?",@omniture)
+  set @boys_url = concat("https://fr.underarmour.com/en-ca/boys/g/3f","?",@omniture)
+  set @girls_url = concat("https://fr.underarmour.com/en-ca/girls/g/3i","?",@omniture)
+  set @shoes_url = concat("https://fr.underarmour.com/en-ca/footwear","?",@omniture)
+  set @technology_url = concat("https://fr.underarmour.com/en-ca/2mi79/technologie","?",@omniture)
+  set @outlet_url = concat("https://fr.underarmour.com/en-ca/outlet","?",@omniture)
+  set @free_ship_footer_url = concat("https://fr.underarmour.com/en-ca/","?",@omniture)
+  set @free_return_footer_url = concat("https://fr.underarmour.com/en-ca/services-clientèle/2mefp/Retours-et-échanges","?",@omniture)
+  set @cs_footer_url = concat("http://underarmour-canada-fr.custhelp.com","?",@omniture)
+  set @store_locator_footer_url = concat("https://fr.underarmour.com/en-ca/find-a-store","?",@omniture)
+  set @i_will_footer_url = concat("https://fr.underarmour.com/en-ca/","?",@omniture)
+  set @unsubscribe_url = "https://account.underarmour.com/preferences?j=%%jobid%%"
+  set @privacy_policy_url = concat("https://account.underarmour.com/privacy?locale=fr_ca","?",@omniture)
+  endif
+  set @facebook_url = "https://www.facebook.com/UnderArmourCanada/"
+  set @twitter_url = "https://twitter.com/UnderArmour"
+  set @instagram_url = " https://www.instagram.com/underarmourca/"
+  set @snapchat_url = "https://www.snapchat.com/add/underarmour"
+  set @emailAddress = concat('Veuillez ajouter <a href="mailto:underarmour@emails.underarmour.com" target="_blank" style="text-decoration:none; color:#989898; white-space:nowrap !important;" alias="%%=v(@creativeversion)=%%_Sender Email Address">underarmour@emails.underarmour.com</a> &agrave; votre carnet&nbsp;d&rsquo;adresses. <br /> Le courriel a &eacute;t&eacute; envoy&eacute;  &agrave;: <a href="mailto:',email_address,'" target="_blank" style="text-decoration:none; color:#989898;" alias="%%=v(@creativeversion)=%%_Recipient Email Address">',email_address,'</a>')
+  endif
+
+  if @country == "US" or @country == "CAEN" then
+    set @men_text = "MEN"
+    set @women_text = "WOMEN"
+    set @boys_text = "BOYS"
+    set @girls_text = "GIRLS"
+    set @shoes_text = "SHOES"
+    set @new_arrivals_text = "NEW ARRIVALS"
+    set @outlet_text = "OUTLET"
+    set @technology_text = "TECHNOLOGY"
+  elseif @country == "CAFR" then
+    set @men_text = "HOMME"
+    set @women_text = "FEMME"
+    set @boys_text = "GAR&Ccedil;ON"
+    set @girls_text = "FILLE"
+    set @shoes_text = "CHAUSSURES"
+    set @new_arrivals_text = "NOUVEAUT&Eacute;S"
+    set @outlet_text = "SOLDE"
+    set @technology_text = "TECHNOLOGIE"
+  endif
+
+  ]%%
+
+<head>
+  <title>Under Armour - %%=v(@subjectline)=%%</title>
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <!-- For Media Queries -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!-- Use the latest (edge) version of IE rendering engine -->
+  <meta name="x-apple-disable-message-reformatting" />
+  <!-- Disable auto-scale in iOS 10 Mail entirely -->
+
+  <!--[if !mso]><!-- -->
+  <link href="https://fonts.googleapis.com/css?family=Pathway+Gothic+One" rel="stylesheet">
+  <style type="text/css">
+    /* latin-ext */
+    @font-face {
+      font-family: 'Pathway Gothic One';
+      font-style: normal;
+      font-weight: 400;
+      src: local('Pathway Gothic One Regular'), local('PathwayGothicOne-Regular'), url(https://fonts.gstatic.com/s/pathwaygothicone/v5/Lqv9ztoTUV8Q0FmQZzPqaA6LSHyyJAN5JIFgwWnj0Az3rGVtsTkPsbDajuO5ueQw.woff2) format('woff2');
+      unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
+    }
+    /* latin */
+    @font-face {
+      font-family: 'Pathway Gothic One';
+      font-style: normal;
+      font-weight: 400;
+      src: local('Pathway Gothic One Regular'), local('PathwayGothicOne-Regular'), url(https://fonts.gstatic.com/s/pathwaygothicone/v5/Lqv9ztoTUV8Q0FmQZzPqaHT0-GP0evTJPrdxn7U7ioo.woff2) format('woff2');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;
+    }
+    @import url('https://fonts.googleapis.com/css?family=Pathway+Gothic+One');
+  </style>
+  <!--<![endif]-->
+  <style type="text/css">
+  /* CLIENT-SPECIFIC STYLES */
+  
+  body,
+  table,
+  td,
+  a {
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+  }
+  
+  table,
+  td {
+    mso-table-lspace: 0pt;
+    mso-table-rspace: 0pt;
+  }
+  
+  img {
+    -ms-interpolation-mode: bicubic;
+  }
+  /*Forces Outlook.com to display normal line spacing*/
+  
+  .ExternalClass,
+  .ExternalClass p,
+  .ExternalClass span,
+  .ExternalClass font,
+  .ExternalClass td,
+  .ExternalClass div {
+    line-height: 100%;
+  }
+  /* RESET STYLES */
+  
+  img {
+    border: 0;
+    line-height: 100%;
+    outline: none;
+    text-decoration: none;
+  }
+  
+  table {
+    border-collapse: collapse !important;
+  }
+  
+  body {
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+  
+  th {
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+  }
+
+
+
+  input {
+    display: none;
+  }
+
+
+
+  /* iOS BLUE LINKS */
+  
+  a[x-apple-data-detectors] {
+    color: inherit !important;
+    text-decoration: none !important;
+    font-size: inherit !important;
+    font-family: inherit !important;
+    font-weight: inherit !important;
+    line-height: inherit !important;
+  }
+ .mobile-show {display:none !important;}
+  /* MEDIA QUERIES */
+  
+  @media screen and (max-width: 414px) {
+ .drop{display:block !important;}
+    .img-auto{
+      height: auto !important;
+    }
+    .mobile-show {
+      display:block !important;
+      max-height:none !important;
+   margin: 0;
+      padding: 0;
+      overflow : visible !important;
+      width: auto !important;
+    }
+    .mobile-hide {
+      display: none !important;
+    }
+    .mobile-center {
+      text-align: center !important;
+    }
+    table {
+      max-width: 414px !important;
+    }
+    .full-width {
+      width: 100% !important;
+    }
+    .mobile-width {
+      width: 414px !important;
+    }
+ .mobile-half-width {
+      width: 207px !important;
+    }
+    .height72 {
+      height: 54px !important;
+    }
+    .nav-icon-left {
+      padding-right: 100px !important;
+    }
+    .nav-icon-right {
+      padding-left: 100px !important;
+    }
+    .interact-nav {
+      width: 225px !important;
+    }
+    .interact-nav table td {
+      height: 60px !important;
+    }
+    .half-width {
+      width: 50% !important;
+    }
+    .float {
+      float: left !important;
+    }
+    .inline-block {
+      display: inline-block !important;
+    }
+    .logo {
+      width: 65px !important;
+    }
+    .padding0{
+      padding: 0 !important;
+    }
+    .paddingT32 {
+      padding-top: 32px !important;
+    }
+    .width88 {
+      width: 88% !important;
+    }
+    .paddingT24B32 {
+      padding-top: 24px !important;
+
+      padding-bottom: 32px !important;
+    }
+    .no-paddingB {
+      padding-bottom: 0 !important;
+    }
+    .footer > table {
+      width: 95%;
+    }
+    .no-border {
+      border: none;
+    }
+    #navcontainer {
+      top: 8px !important;
+    }
+    #menucontainer {
+      top: 65px !important;
+    }
+    .CTA {
+      font-size: 13px !important;
+      padding: 10px 14px 9px 14px !important;
+    }
+  .font20 {font-size:20px !important;  line-height:22px !important;}
+  .font16 {font-size:16px !important; line-height:18px !important;}
+  .disclaimerPadding {padding-left:20px !important; padding-right:20px !important;}
+  }
+  
+  @media screen and (max-width: 320px) {
+ .drop{display:block !important;}
+    table {
+      max-width: 320px !important;
+    }
+    .mobile-width {
+      width: 320px !important;
+    }
+  .mobile-half-width {
+      width: 160px !important;
+    }
+    .height72 {
+    height: 42px !important;
+    }
+    .nav-icon-left {
+      padding-right: 65px !important;
+    }
+    .nav-icon-right {
+      padding-left: 65px !important;
+    }
+  .font20 {font-size:18px !important; line-height:20px !important;}
+  .font16 {font-size:15px !important; line-height:17px !important;}
+  .disclaimerPadding {padding-left:10px !important; padding-right:10px !important;}
+  }
+@media (-webkit-min-device-pixel-ratio: 0){
+    .nav-icon-left, .nav-icon-right {
+      display: table-cell !important;
+    }
+    #header-container {
+      position: relative;
+    }
+    #header-container > a > img {
+      display: inline-block;
+    }
+    #navcontainer {
+      position: absolute;
+      text-align: left;
+      top: 13px;
+      z-index: 100;
+    }
+    #navcontainer img {
+      padding-left: 35px;
+    }
+    #menucontainer {
+      position: relative;
+      top: 69px;
+    }
+
+    #menucontainer div{
+      height: 0;
+      overflow: hidden;
+      -ms-transition: height .5s ease-in-out;
+      -webkit-transition: height .5s ease-in-out;
+    }
+    #aolmail_navcheckbox:checked + div{
+      height: 488px !important;
+    }
+    #navcheckbox:checked ~ div{
+      height: 488px !important;
+    }
+    .nav-over,.nav-under, #menucontainer div{
+      display:block !important;
+      max-height:none !important;
+    }
+
+    /* hover fallback function */
+    /* to deal with quirks in windows 8.1 and Outlook iOS */
+    .nav-over:hover + div #menulist{
+      height: 488px !important;
+    }
+    .nav-over{
+      -ms-transition-delay: 1.5s;
+      -webkit-transition-delay: 1.5s;
+    }
+    .nav-over:hover{
+      visibility:hidden;
+    }
+   .fallback {
+      display: none !important;
+    }
+   .carousel {
+    overflow:visible !important;
+   display:block !important;
+   max-height:none !important;
+  }
+    #MessageViewBody .fallback {
+  display:block !important;
+  }
+    #MessageViewBody #navcontainer, #MessageViewBody .carousel{
+  display:none !important;
+  overflow: hidden;
+  height: 0;
+    }
+
+  }
+  /* ANDROID CENTER FIX */
+  
+  div[style*="margin: 16px 0;"] {
+    margin: 0 !important;
+  }
+  </style>
+  <!--[if gte mso 9]>
+  <style>
+    .txt-raise {
+      mso-text-raise: 3px;
+    }
+  </style>
+  <![endif]-->
+  <!-- Outlook 120 dpi -->
+  <!--[if gte mso 9]><xml>
+     <o:OfficeDocumentSettings>
+      <o:AllowPNG/>
+      <o:PixelsPerInch>96</o:PixelsPerInch>
+     </o:OfficeDocumentSettings>
+    </xml>
+  <![endif]-->
+</head>
+
+<body style="margin:0 auto; padding:0; width:100% !important;">
+  <!-- HIDDEN PREHEADER TEXT -->
+    <!--[if !mso]><!-->
+<div style="display:none; margin:0; padding:0; width:0px; max-height:0px; overflow:hidden; font-size:0; line-height:0;">
+  <table cellpadding="0" cellspacing="0" border="0" width="100%" class="hidden">
+    <tr>
+      <td align="left" valign="top" style="font-family:Arial, Helvetica, sans-serif; color:#5a5a5a; font-size:1px;  mso-line-height-rule:exactly; line-height:1px; ">%%=v(@preheader_text)=%%</td>
+    </tr>
+  </table>
+</div>
+<!--<![endif]-->
+<!--Tracking Pixel-->
+<table cellpadding="0" cellspacing="0" border="0">
+  <tr>
+    <td class="hidden" align="left" valign="top"><div style="display:none;">
+        <custom name="opencounter" type="tracking">
+        <img width='0' height='0' src='%%=v(@adometry)=%%'>
+        <img src="http://mi.underarmour.com/p/cp/83d8252bffec11fc/o.gif?mi_u=%%subscriberid%%" width="1" height="1" alt="" aria-hidden="true" />
+      </div>
+
+</td>
+  </tr>
+</table>
+<!--END Tracking Pixel-->
+  <table align="center" cellpadding="0" cellspacing="0" border="0" width="100%">
+    <tr>
+     
+          <td align="center" valign="top" >
+      %%[if @promo_text != "TBD" and @promo_text != "" then]%%
+        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+          <tr>
+            <td align="center" valign="middle" bgcolor="#1d1d1d" height="50">
+              <table cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td align="center" valign="top" style="font-family:Helvetica, Arial, sans-serif; font-size:14px; mso-line-height-rule:exactly; line-height:16px; color: #ffffff;">
+                    
+                    <a href="%%=RedirectTo(@promo_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Promo" style="color: #ffffff; text-decoration: none;">%%=v(@promo_text)=%%</a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+        %%[endif]%%
+        <table cellpadding="0" cellspacing="0" border="0" width="550">
+          <tr>
+            <td align="center" valign="middle" style="padding-top: 32px; padding-bottom: 35px;">
+              <div id="header-container">
+                <a href="%%=RedirectTo(@ua_logo_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_UA" style="color: #000001; text-decoration: underline;"><img class="logo img-auto" src="http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/11/cdf5a919-b442-42ac-90ef-5f5a6abeddf6.gif" alt="" width="79" height="47" border="0" style="display: inline-block;" /></a>
+
+                <div id="navcontainer">
+                  <!--[if !mso 9]><!-->
+                  <label for="aolmail_navcheckbox">
+                  <div class="nav-under" style="display:none;overflow:hidden;max-height:0px; width: 100px; position: absolute;"><img src="http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/11/44e05948-6d02-4b0c-9b4d-f8065edb1aa2.png" alt="" width="30" height="20" border="0" /></div>
+                  <div class="nav-over" style="display:none;overflow:hidden;max-height:0px;position:absolute;top:0px;width: 100px;opacity:0;"><img src="http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/11/44e05948-6d02-4b0c-9b4d-f8065edb1aa2.png" alt="" width="30" height="20" border="0" /></div>
+                  </label>
+                  <!--<![endif]-->
+                  <div id="menucontainer">
+                    <!--[if !mso 9]><!-->
+                    <input id="navcheckbox" type="checkbox" style="display: none; display:none !important;mso-hide:all;">
+                    <input id="aolmail_navcheckbox" type="checkbox" style="display: none; display:none !important;mso-hide:all;">
+                    
+                    <div id="menulist" style="display:none;overflow:hidden;max-height:0px;">
+                      <table class="interact-nav" cellpadding="0" cellspacing="0" border="0" width="235" bgcolor="#f0f0f0">
+                        <tr>
+                          <td align="left" valign="top" style="padding: 0 11px;">
+                            <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                              <tr style="border-bottom: 1px solid #bcbcbc;">
+                                <td align="left" valign="middle"><a href="%%=RedirectTo(@men_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Men" style="font-family:Helvetica, Arial, sans-serif; font-size: 15px; line-height: 59px; color: #000001; padding-left: 14px; background-image: url(http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/11/b91cb38a-b9e3-4987-80c4-f28df0828d56.png); background-size: 8px 12px; background-repeat: no-repeat; background-position: 96% 50%; text-decoration: none; display: block;">%%=v(@men_text)=%%</a></td>
+                              </tr>
+                              <tr style="border-bottom: 1px solid #bcbcbc;">
+                                <td align="left" valign="middle"><a href="%%=RedirectTo(@women_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Women" style="font-family:Helvetica, Arial, sans-serif; font-size: 15px; line-height: 59px; color: #000001; padding-left: 14px; background-image: url(http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/11/b91cb38a-b9e3-4987-80c4-f28df0828d56.png); background-size: 8px 12px; background-repeat: no-repeat; background-position: 96% 50%; text-decoration: none; display: block;">%%=v(@women_text)=%%</a></td>
+                              </tr>
+                              <tr style="border-bottom: 1px solid #bcbcbc;">
+                                <td align="left" valign="middle"><a href="%%=RedirectTo(@boys_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Boys" style="font-family:Helvetica, Arial, sans-serif; font-size: 15px; line-height: 59px; color: #000001; padding-left: 14px; background-image: url(http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/11/b91cb38a-b9e3-4987-80c4-f28df0828d56.png); background-size: 8px 12px; background-repeat: no-repeat; background-position: 96% 50%; text-decoration: none; display: block;">%%=v(@boys_text)=%%</a></td>
+                              </tr>
+                              <tr style="border-bottom: 1px solid #bcbcbc;">
+                                <td align="left" valign="middle"><a href="%%=RedirectTo(@girls_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Girls" style="font-family:Helvetica, Arial, sans-serif; font-size: 15px; line-height: 59px; color: #000001; padding-left: 14px; background-image: url(http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/11/b91cb38a-b9e3-4987-80c4-f28df0828d56.png); background-size: 8px 12px; background-repeat: no-repeat; background-position: 96% 50%; text-decoration: none; display: block;">%%=v(@girls_text)=%%</a></td>
+                              </tr>
+                              <tr style="border-bottom: 1px solid #bcbcbc;">
+                                <td align="left" valign="middle"><a href="%%=RedirectTo(@shoes_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Shoes" style="font-family:Helvetica, Arial, sans-serif; font-size: 15px; line-height: 59px; color: #000001; padding-left: 14px; background-image: url(http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/11/b91cb38a-b9e3-4987-80c4-f28df0828d56.png); background-size:8px 12px; background-repeat: no-repeat; background-position: 96% 50%; text-decoration: none; display: block;">%%=v(@shoes_text)=%%</a></td>
+                              </tr>
+                              <tr style="border-bottom: 1px solid #bcbcbc;">
+                                <td align="left" valign="middle"><a href="%%=RedirectTo(@new_arrivals_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_New Arrivals" style="font-family:Helvetica, Arial, sans-serif; font-size: 15px; line-height: 59px; color: #000001; padding-left: 14px; background-image: url(http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/11/b91cb38a-b9e3-4987-80c4-f28df0828d56.png); background-size: 8px 12px; background-repeat: no-repeat; background-position: 96% 50%; text-decoration: none; display: block;">%%=v(@new_arrivals_text)=%%</a></td>
+                              </tr>
+                              <tr style="border-bottom: 1px solid #bcbcbc;">
+                                <td align="left" valign="middle"><a href="%%=RedirectTo(@outlet_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Outlet" style="font-family:Helvetica, Arial, sans-serif; font-size: 15px; line-height: 59px; color: #000001; padding-left: 14px; background-image: url(http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/11/b91cb38a-b9e3-4987-80c4-f28df0828d56.png); background-size: 8px 12px; background-repeat: no-repeat; background-position: 96% 50%; text-decoration: none; display: block;">%%=v(@outlet_text)=%%</a></td>
+                              </tr>
+                              <tr>
+                                <td align="left" valign="middle"><a href="%%=RedirectTo(@technology_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Technology" style="font-family:Helvetica, Arial, sans-serif; font-size: 15px; line-height: 59px; color: #000001; padding-left: 14px; background-image: url(http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/11/b91cb38a-b9e3-4987-80c4-f28df0828d56.png); background-size: 8px 12px; background-repeat: no-repeat; background-position: 96% 50%; text-decoration: none; display: block;">%%=v(@technology_text)=%%</a></td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                      <!--<![endif]-->
+                    </div>
+                    
+                  </div>
+                </div>
+
+              </div>
+            </td>
+          </tr>
+        </table>
+        <table class="mobile-hide fallback" cellpadding="0" cellspacing="0" border="0">
+          <tr>
+            <td align="left" valign="top" style="font-family:Helvetica, Arial, sans-serif; font-size:14px; color: #000001; padding: 0 14px 35px 14px;"><a href="%%=RedirectTo(@men_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Men" style="color: #000001; text-decoration: none; font-weight: bold;">%%=v(@men_text)=%%</a></td>
+            <td align="left" valign="top" style="font-family:Helvetica, Arial, sans-serif; font-size:14px; color: #000001; padding: 0 14px 35px 14px;"><a href="%%=RedirectTo(@women_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Women" style="color: #000001; text-decoration: none; font-weight: bold;">%%=v(@women_text)=%%</a></td>
+            <td align="left" valign="top" style="font-family:Helvetica, Arial, sans-serif; font-size:14px; color: #000001; padding: 0 14px 35px 14px;"><a href="%%=RedirectTo(@boys_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Boys" style="color: #000001; text-decoration: none; font-weight: bold;">%%=v(@boys_text)=%%</a></td>
+            <td align="left" valign="top" style="font-family:Helvetica, Arial, sans-serif; font-size:14px; color: #000001; padding: 0 14px 35px 14px;"><a href="%%=RedirectTo(@girls_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Girls" style="color: #000001; text-decoration: none; font-weight: bold;">%%=v(@girls_text)=%%</a></td>
+            <td align="left" valign="top" style="font-family:Helvetica, Arial, sans-serif; font-size:14px; color: #000001; padding: 0 14px 35px 14px;"><a href="%%=RedirectTo(@shoes_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Shoes" style="color: #000001; text-decoration: none; font-weight: bold;">%%=v(@shoes_text)=%%</a></td>
+          </tr>
+        </table>
+        <table cellpadding="0" cellspacing="0" border="0" width="550" style="width:550px;" class="full-width">
+         <!-- HERO IMAGE-->
+          <tr>
+            <td align="left" valign="middle"><a href="%%=RedirectTo(@main_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_First Image" title="YOU GOTTA SHOW UP. - IT's YOUR TEAM. NOW PROVE IT." style="color: #000001; text-decoration: underline;"><img class="mobile-width img-auto" src="http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/13/746b8088-a3f2-4e4c-8fb9-f2f194f35b0f.jpg" alt="YOU GOTTA SHOW UP. - IT's YOUR TEAM. NOW PROVE IT." width="550" height="608" border="0" style="display: block;" /></a></td>
+          </tr>
+       <!-- START ADDITIONAL CTA'S -->
+       <!-- END ADDITIONAL CTA'S -->
+       </table>
+       
+     <!-- START SECONDARY IMAGE SECTION-->
+     %%[if @secondary == "Y" then]%%
+       <table cellpadding="0" cellspacing="0" border="0" width="550"  style="width:550px;" class="full-width">
+        
+          <tr>
+            <td align="left" valign="middle" style="padding-top:25px; "><a href="%%=RedirectTo(@sec_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Second Image" title="%%=v(@sec_alt)=%%" style="color: #000001; text-decoration: underline;"><img class="mobile-width img-auto" src="%%=v(@sec_img)=%%" alt="%%=v(@sec_alt)=%%" width="550" height="%%=v(@sec_img_height)=%%" border="0" style="display: block;" /></a></td>
+          </tr>
+          %%[if (@sec_line1 != "TBD" and @sec_line1 != "") or (@sec_line2 != "TBD" and @sec_line2 != "") then]%%
+          <tr>
+           <td align="center" valign="top" style="padding-top:25px;"><table cellpadding="0" cellspacing="0" border="0">
+            %%[if @sec_line1 != "TBD" and @sec_line1 != "" then]%%
+          <tr>
+            <td align="center" valign="top" class="font20" style="font-family:Helvetica, Arial, sans-serif; font-size:24px; line-height:27px; color: #000001; padding: 16px 10px 8px 10px;"><a href="%%=RedirectTo(@sec_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Second Image_line_1" title="" style="color: #000001; text-decoration: none;"><strong>%%=v(@sec_line1)=%%</strong></a>
+            </td>
+          </tr>
+         %%[endif]%%
+          %%[if @sec_line2 != "TBD" and @sec_line2 != "" then]%%
+          <tr>
+     <td align="center" class="font16" valign="top" style="font-family:Helvetica, Arial, sans-serif; font-size:20px; line-height:22px; color: #000001; padding:0 10px;"><a href="%%=RedirectTo(@sec_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Second Image_line_2" title="" style="color: #000001; text-decoration: none;">%%=v(@sec_line2)=%%</a></td>
+          </tr>
+          %%[endif]%%
+           </table></td>
+          </tr>
+          %%[endif]%%
+          %%[if @sec_cta != "TBD" and @sec_cta != "" then]%%
+          <tr>
+            <td align="center" valign="top" style="padding-top: 27px; padding-bottom:%%=v(@pad_bottom)=%%px;" >
+              <table cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td class="CTA" align="left" valign="middle" style="font-family:Helvetica, Arial, sans-serif; font-size:16px; line-height:16px; color: #000001; border: 2px solid #000001; padding: 15px 19px 14px 19px; font-weight: bold;">
+                    <a href="%%=RedirectTo(@sec_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Second Image_CTA" title="" style="color: #000001; text-decoration: none;">%%=v(@sec_cta)=%%</a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          %%[endif]%%
+        </table>
+        %%[endif]%%
+        <!-- END SECONDARY IMAGE SECTION-->
+        
+        
+         <!-- START TERTIARY IMAGE SECTION-->
+     %%[if @tertiary == "Y" then]%%
+        
+        <table cellpadding="0" cellspacing="0" border="0" width="550" style="width:550px;" class="full-width">
+          <tr>
+            <td class="float no-border mobile-width" align="center" valign="top">
+              <table cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td align="center" valign="top" style="padding-top:25px;"><a href="%%=RedirectTo(@tertiary_url1)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Tertiary Image 1" style="color: #000001; text-decoration: none;"><img src="%%=v(@tertiary_img1)=%%" alt="%%=v(@tertiary_alt1)=%%" height="%%=v(@tertiary_img1_height)=%%" width="265" border="0" style="display: block;" class="mobile-width img-auto" /></a></td>
+                </tr>
+                <tr>
+                  <td  align="center" valign="middle" style="padding-top: 32px; padding-bottom: 65px; line-height: 0px;">
+                    <table cellpadding="0" cellspacing="0" border="0">
+                      <tr>
+                        <td class="txt-raise" align="left" valign="bottom" height="20" style="font-family:Arial, Helvetica, sans-serif; font-size:16px; color: #000001; padding-right: 5px; line-height: 19px;"><a href="%%=RedirectTo(@tertiary_url1)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Tertiary CTA 1" title="" style="color: #000001; text-decoration: none;"><strong>%%=v(@tertiary_cta1)=%%</strong></a></td>
+                        <td align="left" valign="middle" style="line-height: 0px;"><img src="http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/11/b91cb38a-b9e3-4987-80c4-f28df0828d56.png" alt="" height="12" width="8" border="0" style="display: block;" /></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+            <td width="20" class="mobile-hide">&nbsp;</td>
+            <td class="float no-border mobile-width" align="center" valign="top">
+              <table cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td align="center" valign="top" style="padding-top:25px;"><a href="%%=RedirectTo(@tertiary_url2)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Tertiary Image 2" style="color: #000001; text-decoration: none;"><img src="%%=v(@tertiary_img2)=%%" alt="%%=v(@tertiary_alt2)=%%" height="%%=v(@tertiary_img2_height)=%%" width="265" border="0" style="display: block;" class="mobile-width img-auto" /></a></td>
+                </tr>
+                <tr>
+                  <td align="center" valign="top" style="padding-top: 32px; padding-bottom: 65px; line-height: 0px;">
+                    <table cellpadding="0" cellspacing="0" border="0">
+                      <tr>
+                        <td class="txt-raise" align="left" valign="bottom" height="20" style="font-family:Arial, Helvetica, sans-serif; font-size:16px; color: #000001; padding-right: 5px; line-height: 19px;"><a href="%%=RedirectTo(@tertiary_url2)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Tertiary CTA 2" title="" style="color: #000001; text-decoration: none;"><strong>%%=v(@tertiary_cta2)=%%</strong></a></td>
+                        <td align="left" valign="middle" style="line-height: 0px;"><img src="http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/11/b91cb38a-b9e3-4987-80c4-f28df0828d56.png" alt="" height="12" width="8" border="0" style="display: block;" /></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+        
+        %%[endif]%%
+        <!-- END TERTIARY IMAGE SECTION-->
+        
+        
+        
+        
+        
+
+        %%[ if @top_line == "Y" then ]%%
+       <table class="width88" cellpadding="0" cellspacing="0" border="0" width="550" style="border-bottom: 1px solid #bbbbbb; width:550px;">
+          <tr>
+            <td height="1" align="left" valign="top" style="font-size: 0; line-height: 0px;">&nbsp;</td>
+          </tr>
+        </table>
+        %%[else]%%
+        
+        %%[endif]%%
+        <table class="mobile-hide fallback" cellpadding="0" cellspacing="0" border="0" width="550" style="width:550px;">
+          <tr>
+            <td align="left" valign="top" style="padding: 26px 0; border-bottom: 1px solid #bbbbbb;">
+              <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                <tr>
+                  <td align="center" valign="top" style="font-family:Helvetica, Arial, sans-serif; font-size:14px; color: #1d1d1d; font-weight: bold;"><a href="%%=RedirectTo(@new_arrivals_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_New Arrivals" style="color: #1d1d1d; text-decoration: none;">%%=v(@new_arrivals_text)=%%</a></td>
+                  <td width="27%" align="center" valign="top" style="font-family:Helvetica, Arial, sans-serif; font-size:14px; color: #1d1d1d; font-weight: bold; border-left: 1px solid #bbbbbb; border-right: 1px solid #bbbbbb;"><a href="%%=RedirectTo(@outlet_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Outlet" style="color: #1d1d1d; text-decoration: none;">%%=v(@outlet_text)=%%</a></td>
+                  <td align="center" valign="top" style="font-family:Helvetica, Arial, sans-serif; font-size:14px; color: #1d1d1d; font-weight: bold;"><a href="%%=RedirectTo(@technology_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Technology" style="color: #1d1d1d; text-decoration: none;">%%=v(@technology_text)=%%</a></td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+        <!--[if !mso 9]><!-->
+        <div class="fallback mobile-show" style="display:none;overflow:hidden;max-height:0px;">
+          <table cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse: separate !important; border-spacing: 6.25vw 0; table-layout: fixed; ">
+            <tr>
+              <td width="50%" align="left" valign="middle" style="border-bottom: 1px solid #bcbcbc;">
+
+
+                <a href="%%=RedirectTo(@men_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Men" style="font-family:Helvetica, Arial, sans-serif; font-size:12px; font-weight: bold; color: #000001; padding: 20px 5px 20px 10px; text-decoration: none; display: block; background-image: url(http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/11/b91cb38a-b9e3-4987-80c4-f28df0828d56.png); background-size: 9px 13px; background-repeat: no-repeat; background-position: 92% 50%;">%%=v(@men_text)=%%</a>
+              </td>
+              <td width="50%" align="left" valign="middle" style="border-bottom: 1px solid #bcbcbc;">
+                <a href="%%=RedirectTo(@women_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Women" style="font-family:Helvetica, Arial, sans-serif; font-size:12px; font-weight: bold; color: #000001; padding: 20px 5px 20px 10px; text-decoration: none; display: block; background-image: url(http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/11/b91cb38a-b9e3-4987-80c4-f28df0828d56.png); background-size: 9px 13px; background-repeat: no-repeat; background-position: 92% 50%;">%%=v(@women_text)=%%</a>
+              </td>
+            </tr>
+            <tr>
+              <td width="50%" align="left" valign="middle" style="border-bottom: 1px solid #bcbcbc;">
+                <a href="%%=RedirectTo(@boys_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Boys" style="font-family:Helvetica, Arial, sans-serif; font-size:12px; font-weight: bold; color: #000001; padding: 20px 5px 20px 10px; text-decoration: none; display: block; background-image: url(http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/11/b91cb38a-b9e3-4987-80c4-f28df0828d56.png); background-size: 9px 13px; background-repeat: no-repeat; background-position: 92% 50%;">%%=v(@boys_text)=%%</a>
+              </td>
+              <td width="50%" align="left" valign="middle" style="border-bottom: 1px solid #bcbcbc;">
+                <a href="%%=RedirectTo(@girls_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Girls" style="font-family:Helvetica, Arial, sans-serif; font-size:12px; font-weight: bold; color: #000001; padding: 20px 5px 20px 10px; text-decoration: none; display: block; background-image: url(http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/11/b91cb38a-b9e3-4987-80c4-f28df0828d56.png); background-size: 9px 13px; background-repeat: no-repeat; background-position: 92% 50%;">%%=v(@girls_text)=%%</a>
+              </td>
+            </tr>
+            <tr>
+              <td width="50%" align="left" valign="middle" style="border-bottom: 1px solid #bcbcbc;">
+                <a href="%%=RedirectTo(@shoes_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Shoes" style="font-family:Helvetica, Arial, sans-serif; font-size:12px; font-weight: bold; color: #000001; padding: 20px 5px 20px 10px; text-decoration: none; display: block; background-image: url(http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/11/b91cb38a-b9e3-4987-80c4-f28df0828d56.png); background-size: 9px 13px; background-repeat: no-repeat; background-position: 92% 50%;">%%=v(@shoes_text)=%%</a>
+              </td>
+              <td width="50%" align="left" valign="middle" style="border-bottom: 1px solid #bcbcbc;">
+                <a href="%%=RedirectTo(@new_arrivals_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_New Arrivals" style="font-family:Helvetica, Arial, sans-serif; font-size:12px; font-weight: bold; color: #000001; padding: 20px 5px 20px 10px; text-decoration: none; display: block; background-image: url(http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/11/b91cb38a-b9e3-4987-80c4-f28df0828d56.png); background-size: 9px 13px; background-repeat: no-repeat; background-position: 92% 50%;">%%=v(@new_arrivals_text)=%%</a>
+              </td>
+            </tr>
+            <tr>
+              <td width="50%" align="left" valign="middle" style="border-bottom: 1px solid #bcbcbc;">
+                <a href="%%=RedirectTo(@outlet_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Outlet" style="font-family:Helvetica, Arial, sans-serif; font-size:12px; font-weight: bold; color: #000001; padding: 20px 5px 20px 10px; text-decoration: none; display: block; background-image: url(http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/11/b91cb38a-b9e3-4987-80c4-f28df0828d56.png); background-size: 9px 13px; background-repeat: no-repeat; background-position: 92% 50%;">%%=v(@outlet_text)=%%</a>
+              </td>
+              <td width="50%" align="left" valign="middle" style="border-bottom: 1px solid #bcbcbc;">
+                <a href="%%=RedirectTo(@technology_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Technology" style="font-family:Helvetica, Arial, sans-serif; font-size:12px; font-weight: bold; color: #000001; padding: 20px 5px 20px 10px; text-decoration: none; display: block; background-image: url(http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/11/b91cb38a-b9e3-4987-80c4-f28df0828d56.png); background-size: 9px 13px; background-repeat: no-repeat; background-position: 92% 50%;">%%=v(@technology_text)=%%</a>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <!--<![endif]-->
+
+        %%[
+        if @country == "US" then
+        ]%%
+        <table align="center" class="width88" cellpadding="0" cellspacing="0" border="0" width="550" style="width:550px;">
+          <tr>
+            <td align="center" valign="top" style="padding: 32px 0; border-bottom: 1px solid #bbbbbb; font-size: 0;">
+              <table cellpadding="0" cellspacing="0" border="0" width="97%" class="full-width">
+                <tr>
+                  <td class="half-width inline-block" align="center" valign="bottom">
+                    <table cellpadding="0" cellspacing="0" border="0">
+                      <tr>
+                        <td align="center" valign="top">
+                          <a href="%%=RedirectTo(@free_ship_footer_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Free Ship $49+" style="color: #000001; text-decoration: underline;"><img src="http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/11/17057e9f-0270-4f44-86e7-7f8821d23cd7.png" width="83" height="42" border="0" alt="" style="display: block;" /></a>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td align="center" valign="top" style="font-family:Helvetica, Arial, sans-serif; font-size:12px; mso-line-height-rule:exactly; line-height:12px; color: #757575; padding-top: 11px; white-space:nowrap;">Free&nbsp;Shipping&nbsp;Available*</td>
+                      </tr>
+                    </table>
+                  </td>
+                  <td class="mobile-hide" width="33%">&nbsp;</td>
+                  <td class="half-width inline-block" align="center" valign="bottom">
+                    <table cellpadding="0" cellspacing="0" border="0">
+
+                      <tr>
+                        <td align="center" valign="top">
+                          <a href="%%=RedirectTo(@free_return_footer_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Free Returns" style="color: #000001; text-decoration: underline;"><img src="http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/11/ab6b6788-600d-45fc-a799-48ac866421d6.png" width="42" height="45" border="0" alt="" style="display: block;" /></a>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td align="center" valign="top" style="font-family:Helvetica, Arial, sans-serif; font-size:12px; mso-line-height-rule:exactly; line-height:12px;  color: #757575; padding-top: 11px; white-space:nowrap;">Free&nbsp;Returns</td>
+                      </tr>
+                    </table>
+                  </td>
+                  <td class="mobile-hide" width="33%">&nbsp;</td>
+                  <td class="half-width inline-block paddingT32" align="center" valign="bottom">
+                    <table cellpadding="0" cellspacing="0" border="0">
+                      <tr>
+                        <td align="center" valign="top">
+                          <a href="%%=RedirectTo(@ua_shop_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_UA Shop" style="color: #000001; text-decoration: underline;"><img src="http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/11/f9395667-d283-4dd3-bf85-4735d71e979d.png" width="30" height="55" border="0" alt="" style="display: block;" /></a>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td align="center" valign="top" style="font-family:Helvetica, Arial, sans-serif; font-size:12px; mso-line-height-rule:exactly; line-height:12px;  color: #757575; padding-top: 11px; white-space:nowrap;">Under&nbsp;Armour&nbsp;App</td>
+                      </tr>
+                    </table>
+                  </td>
+                  <td class="mobile-hide" width="33%">&nbsp;</td>
+                  <td class="half-width inline-block paddingT32" align="center" valign="bottom">
+                    <table cellpadding="0" cellspacing="0" border="0">
+                      <tr>
+                        <td align="center" valign="top">
+                          <a href="%%=RedirectTo(@ua_gift_footer_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_UA Gift Cards" style="color: #000001; text-decoration: underline;"><img src="http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/11/4f6a14f7-42bf-459d-b90c-399dd29faa7e.png" width="64" height="44" border="0" alt="" style="display: block;" /></a>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td align="center" valign="top" style="font-family:Helvetica, Arial, sans-serif; font-size:12px; mso-line-height-rule:exactly; line-height:12px;  color: #757575; padding-top: 11px; white-space:nowrap;">UA&nbsp;Gift&nbsp;Cards</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+        %%[
+        elseif @country == "CAEN" then
+        ]%%
+        <table align="center" class="width88" cellpadding="0" cellspacing="0" border="0" width="550" style="width:550px;" >
+          <tr>
+            <td align="center" valign="top" style="padding: 32px 0; border-bottom: 1px solid #bbbbbb; font-size: 0;">
+              <table cellpadding="0" cellspacing="0" border="0" width="97%" class="full-width">
+                <tr>
+                  <td class="half-width inline-block" align="center" valign="bottom">
+                    <table cellpadding="0" cellspacing="0" border="0">
+                      <tr>
+                        <td align="center" valign="top">
+                          <a href="%%=RedirectTo(@free_ship_footer_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Free Ship $75+ CDN" style="color: #000001; text-decoration: underline;"><img src="http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/11/17057e9f-0270-4f44-86e7-7f8821d23cd7.png" width="83" height="42" border="0" alt="" style="display: block;" /></a>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td align="center" valign="top" style="font-family:Helvetica, Arial, sans-serif; font-size:12px; mso-line-height-rule:exactly; line-height:12px;  color: #757575; padding-top: 11px; white-space:nowrap;">Free&nbsp;Shipping&nbsp;Available*</td>
+                      </tr>
+                    </table>
+                  </td>
+                  <td class="mobile-hide" width="33%">&nbsp;</td>
+                  <td class="half-width inline-block" align="center" valign="bottom">
+                    <table cellpadding="0" cellspacing="0" border="0">
+                      <tr>
+                        <td align="center" valign="top">
+                          <a href="%%=RedirectTo(@free_return_footer_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Free Returns" style="color: #000001; text-decoration: underline;"><img src="http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/11/ab6b6788-600d-45fc-a799-48ac866421d6.png" width="42" height="45" border="0" alt="" style="display: block;" /></a>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td align="center" valign="top" style="font-family:Helvetica, Arial, sans-serif; font-size:12px; mso-line-height-rule:exactly; line-height:12px;  color: #757575; padding-top: 11px; white-space:nowrap;">Free&nbsp;Returns</td>
+                      </tr>
+                    </table>
+                  </td>
+                  <td class="mobile-hide" width="33%">&nbsp;</td>
+                  <td class="half-width inline-block paddingT32" align="center" valign="bottom">
+                    <table cellpadding="0" cellspacing="0" border="0">
+                      <tr>
+                        <td align="center" valign="top">
+                          <a href="%%=RedirectTo(@cs_footer_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Customer Service" style="color: #000001; text-decoration: underline;"><img src="http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/11/c7b0c398-116b-479e-b9cf-62379f293afd.png" width="55" height="44" border="0" alt="" style="display: block;" /></a>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td align="center" valign="top" style="font-family:Helvetica, Arial, sans-serif; font-size:12px; mso-line-height-rule:exactly; line-height:12px;  color: #757575; padding-top: 11px; white-space:nowrap;">Customer&nbsp;Service</td>
+
+                      </tr>
+                    </table>
+                  </td>
+                  <td class="mobile-hide" width="33%">&nbsp;</td>
+                  <td class="half-width inline-block paddingT32" align="center" valign="bottom">
+                    <table cellpadding="0" cellspacing="0" border="0">
+                      <tr>
+                        <td align="center" valign="top">
+                          <a href="%%=RedirectTo(@store_locator_footer_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Store Locator" style="color: #000001; text-decoration: underline;"><img src="http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/11/fdc5ca4c-93d7-4e94-a8c6-d0f4283c8433.png" width="51" height="42" border="0" alt="" style="display: block;" /></a>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td align="center" valign="top" style="font-family:Helvetica, Arial, sans-serif; font-size:12px;mso-line-height-rule:exactly; line-height:12px;  color: #757575; padding-top: 11px; white-space:nowrap;">Store&nbsp;Locator</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+        
+        %%[
+        elseif @country == "CAFR" then
+        ]%%
+        <table align="center" class="width88" cellpadding="0" cellspacing="0" border="0" width="550" style="width:550px;" >
+          <tr>
+            <td align="center" valign="top" style="padding: 32px 0; border-bottom: 1px solid #bbbbbb; font-size: 0;">
+              <table cellpadding="0" cellspacing="0" border="0" width="97%" class="full-width">
+                <tr>
+                  <td class="half-width inline-block" align="center" valign="bottom">
+                    <table cellpadding="0" cellspacing="0" border="0">
+                      <tr>
+                        <td align="center" valign="top">
+                          <a href="%%=RedirectTo(@free_ship_footer_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Free Ship $75+ CDN" style="color: #000001; text-decoration: underline;"><img src="http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/11/17057e9f-0270-4f44-86e7-7f8821d23cd7.png" width="83" height="42" border="0" alt="" style="display: block;" /></a>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td align="center" valign="top" style="font-family:Helvetica, Arial, sans-serif; font-size:12px; mso-line-height-rule:exactly; line-height:12px;  color: #757575; padding-top: 11px; white-space:nowrap;">Livraison&nbsp;gratuite
+                          <br />d&egrave;s&nbsp;75$&nbsp;d'achat</td>
+                      </tr>
+                    </table>
+                  </td>
+                  <td class="mobile-hide" width="33%">&nbsp;</td>
+                  <td class="half-width inline-block" align="center" valign="bottom">
+                    <table cellpadding="0" cellspacing="0" border="0">
+                      <tr>
+                        <td align="center" valign="top">
+                          <a href="%%=RedirectTo(@free_return_footer_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Free Returns" style="color: #000001; text-decoration: underline;"><img src="http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/11/ab6b6788-600d-45fc-a799-48ac866421d6.png" width="42" height="45" border="0" alt="" style="display: block;" /></a>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td align="center" valign="top" style="font-family:Helvetica, Arial, sans-serif; font-size:12px; mso-line-height-rule:exactly; line-height:12px; color: #757575; padding-top: 11px; white-space:nowrap;">Retours&nbsp;gratuits
+                          <br />&nbsp;</td>
+                      </tr>
+                    </table>
+                  </td>
+                  <td class="mobile-hide" width="33%">&nbsp;</td>
+                  <td class="half-width inline-block paddingT32" align="center" valign="bottom">
+                    <table cellpadding="0" cellspacing="0" border="0">
+                      <tr>
+                        <td align="center" valign="top">
+                          <a href="%%=RedirectTo(@cs_footer_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Customer Service" style="color: #000001; text-decoration: underline;"><img src="http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/11/c7b0c398-116b-479e-b9cf-62379f293afd.png" width="55" height="44" border="0" alt="" style="display: block;" /></a>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td align="center" valign="top" style="font-family:Helvetica, Arial, sans-serif; font-size:12px; mso-line-height-rule:exactly; line-height:12px;  color: #757575; padding-top: 11px; white-space:nowrap;">Service&nbsp;&agrave;&nbsp;la&nbsp;client&egrave;le
+                          <br />&nbsp;</td>
+                      </tr>
+                    </table>
+                  </td>
+                  <td class="mobile-hide" width="33%">&nbsp;</td>
+                  <td class="half-width inline-block paddingT32" align="center" valign="bottom">
+                    <table cellpadding="0" cellspacing="0" border="0">
+                      <tr>
+                        <td align="center" valign="top">
+                          <a href="%%=RedirectTo(@store_locator_footer_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Store Locator" style="color: #000001; text-decoration: underline;"><img src="http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/11/fdc5ca4c-93d7-4e94-a8c6-d0f4283c8433.png" width="51" height="42" border="0" alt="" style="display: block;" /></a>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td align="center" valign="top" style="font-family:Helvetica, Arial, sans-serif; font-size:12px; mso-line-height-rule:exactly; line-height:12px;  color: #757575; padding-top: 11px; white-space:nowrap;">Trouver&nbsp;un&nbsp;magasin
+
+                          <br />&nbsp;</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+        %%[endif]%%
+        
+        <!-- MI Store Locator section start -->
+        <table cellpadding="0" cellspacing="0" border="0" width="550" style="width:550px;" class="width88">
+        <tr>
+           <td align="center" valign="top" style="padding:32px 0 30px 0;">
+         <table cellpadding="0" cellspacing="0" border="0">
+          %%[if @multi_MI == "N" then]%%
+              <tr>
+                <td align="center" valign="top" width="550" style="width:550px;" class="full-width"><a href="http://mi.underarmour.com/p/cp/83d8252bffec11fc/c?mi_u=%%subscriberid%%&url=http%3A%2F%2Fmi.underarmour.com%2Fp%2Frp%2Feff01aea38037fec%2Furl" style="display: block;" alias="%%=v(@creativeversion)=%%_MAP"><img alt="MAP" style="border: 0; display: block; max-width:550px;" border="0" src="http://mi.underarmour.com/p/rp/eff01aea38037fec.png?mi_u=%%subscriberid%%" width="550" class="full-width" /></a></td>
+              </tr>
+      %%[else]%%
+      <tr>
+                <td align="center" valign="top" width="550" style="width:550px;" class="full-width"><a href="http://mi.underarmour.com/p/cp/73da54006ce5859a/c?mi_u=%%subscriberid%%&url=http%3A%2F%2Fmi.underarmour.com%2Fp%2Frp%2Ff213ab6cddeb806d%2Furl" style="display: block;" alias="%%=v(@creativeversion)=%%_MAP"><img alt="MAP" style="border: 0; display: block; max-width:550px;" border="0" src="http://mi.underarmour.com/p/rp/f213ab6cddeb806d.png?mi_u=%%subscriberid%%" width="550" class="full-width" /></a></td>
+              </tr>
+      %%[endif]%%
+           </table>
+          </td>
+        </tr>
+      </table>
+      <table class="width88" cellpadding="0" cellspacing="0" border="0" width="550" style="border-bottom: 1px solid #bbbbbb; width:550px;">
+        <tr>
+          <td height="1" align="left" valign="top" style="font-size: 0; line-height: 0px;">&nbsp;</td>
+        </tr>
+      </table>
+       <!-- MI Store Locator section end -->
+        
+        <table cellpadding="0" cellspacing="0" border="0" width="550" style="width:550px;" class="full-width">
+          <tr>
+            <td align="center" valign="top" style="padding: 32px 0;">
+              <table cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td align="left" valign="top">
+                    <a href="%%=RedirectTo(@facebook_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Facebook" style="color: #000001; text-decoration: underline;"><img src="http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/11/bea2f50b-0f72-4d2a-acf0-3b9bebf8ff5c.png" width="30" height="25" border="0" alt="Facebook" style="display: block;" /></a>
+                  </td>
+                  <td width="21">&nbsp;</td>
+                  <td align="left" valign="top">
+                    <a href="%%=RedirectTo(@twitter_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Twitter" style="color: #000001; text-decoration: underline;"><img src="http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/11/450af65f-9370-4b5d-b50b-2ec9f3742d54.png" width="30" height="25" border="0" alt="Twitter" style="display: block;" /></a>
+                  </td>
+                  <td width="24">&nbsp;</td>
+                  <td align="left" valign="top">
+                    <a href="%%=RedirectTo(@instagram_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Instagram" style="color: #000001; text-decoration: underline;"><img src="http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/11/7f4d51f7-3b35-4179-af5b-49835bb79b05.png" width="30" height="25" border="0" alt="Instagram" style="display: block;" /></a>
+                  </td>
+                  <td width="23">&nbsp;</td>
+                  <td align="left" valign="top">
+                    <a href="%%=RedirectTo(@snapchat_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Snapchat" style="color: #000001; text-decoration: underline;"><img src="http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/11/73a1ae15-e920-4bd3-9200-740c02a85e87.png" width="30" height="25" border="0" alt="Snapchat" style="display: block;" /></a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+        <table cellpadding="0" cellspacing="0" border="0" width="550" style="width:550px;" class="full-width">
+          <tr>
+            <td align="center" valign="top" style="padding-bottom: 32px;">
+              <a href="%%=RedirectTo(@i_will_footer_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_I Will." style="color: #000001; text-decoration: underline;"><img src="http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/11/5bf6c27b-6cab-4746-83f0-d293a1d1a749.png" width="71" height="16" border="0" alt="I WILL." style="display: block;" /></a>
+            </td>
+          </tr>
+        </table>
+        <table cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="#1d1d1d">
+          <tr>
+            <td class="footer" align="center" valign="top" style="padding: 50px 0 80px 0;">
+              <table cellpadding="0" cellspacing="0" border="0"  style="width:550px;" class="full-width">
+                <tr>
+                  <td align="center" valign="top">
+                    <table cellpadding="0" cellspacing="0" border="0">
+                      <tr>
+                      %%[if @country == "US" then]%%
+                      <td align="left" valign="top">
+                          <a href="%%=RedirectTo(@ua_shop_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_UA Round Icon" style="color: #000001; text-decoration: underline;"><img src="http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/11/786c6a2e-652b-4a26-a0bb-fa0798abe55d.png" width="45" height="45" border="0" alt="UA" style="display: block;" /></a>
+                        </td>
+                        <td width="11">&nbsp;</td>
+                        %%[endif]%%
+                      
+                        <td align="left" valign="top">
+                          <a href="https://record.underarmour.com/" target="_blank" alias="%%=v(@creativeversion)=%%_UA Record Icon" style="color: #000001; text-decoration: underline;"><img src="http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/11/b644a5fe-e62c-4b3d-9cdf-c1b312459053.png" width="45" height="45" border="0" alt="UA RECORD" style="display: block;" /></a>
+                        </td>
+                        <td width="11">&nbsp;</td>
+                        <td align="left" valign="top">
+
+                          <a href="http://www.mapmyfitness.com/app/" target="_blank" alias="%%=v(@creativeversion)=%%_Map My Fitness Icon" style="color: #000001; text-decoration: underline;"><img src="http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/11/e8d34bfb-3b1b-40be-bf31-7e6f34cf6656.png" width="45" height="45" border="0" alt="Map My Fitness" style="display: block;" /></a>
+                        </td>
+                        <td width="11">&nbsp;</td>
+                        <td align="left" valign="top">
+                          <a href="https://www.endomondo.com/" target="_blank" alias="%%=v(@creativeversion)=%%_Endomondo Icon" style="color: #000001; text-decoration: underline;"><img src="http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/11/d7bb93cd-82ac-4a04-8aa9-64d9e5ab868d.png" width="45" height="45" border="0" alt="Endomondo" style="display: block;" /></a>
+                        </td>
+                        <td width="11">&nbsp;</td>
+                        <td align="left" valign="top">
+                          <a href="https://www.myfitnesspal.com/" target="_blank" alias="%%=v(@creativeversion)=%%_My Fitness Pal Icon" style="color: #000001; text-decoration: underline;"><img src="http://image.emails.underarmour.com/lib/fe8213727c640d747c/m/11/fdcdb49e-ef73-495f-b2d3-1a8eccc1ee3e.png" width="45" height="45" border="0" alt="My Fitness Pal" style="display: block;" /></a>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                %%[
+                if @country == "US" or @country == "CAEN" then
+                ]%%
+                <tr>
+                  <td align="center" valign="top" style="padding-top: 19px; padding-bottom: 40px; font-family:  Helvetica, Arial, sans-serif;  font-size:16px; mso-line-height-rule:exactly; line-height:20px; color: #989898;">
+                    THE WORLD'S LARGEST FITNESS&nbsp;COMMUNITY
+                  </td>
+                </tr>
+                %%[
+                elseif @country == "CAFR" then
+                ]%%
+                <tr>
+                  <td align="center" valign="top" style=" padding: 19px 10px 40px 10px; font-family:  Helvetica, Arial, sans-serif;  font-size:16px; mso-line-height-rule:exactly; line-height:20px; color: #989898; ">
+                    LA PLUS GRANDE COMMUNAUT&Eacute; DE&nbsp;CONDITIONNEMENT PHYSIQUE&nbsp;AU&nbsp;MONDE
+                  </td>
+                </tr>
+                %%[endif]%%
+              </table>
+              <table cellpadding="0" cellspacing="0" border="0" width="550" style="width:550px;" class="full-width">
+               <tr>
+                <td align="center" valign="top" style="font-family:Helvetica, Arial, sans-serif; font-size:13px;  mso-line-height-rule:exactly; line-height:16px; color: #989898; padding: 0 20px 28px 20px;" class="disclaimerPadding">
+                  %%=v(@emailAddress)=%%
+                  </td>
+               </tr>
+              </table>
+              %%[if @disclaimer != "TBD" and @disclaimer != "" then]%%
+              <table cellpadding="0" cellspacing="0" border="0" width="550" style="width:550px;" class="full-width">
+                <tr>
+                  <td align="center" valign="top" style="font-family:Helvetica, Arial, sans-serif; font-size:13px; mso-line-height-rule:exactly; line-height:16px; color: #989898; padding: 0 20px 28px 20px;" class="disclaimerPadding">
+                     %%=v(@disclaimer)=%%
+                  </td>
+                </tr>
+              </table>
+               %%[endif]%%
+              %%[if @country == "US" then]%%
+              <table cellpadding="0" cellspacing="0" border="0" width="550" style="width:550px;" class="full-width">
+                <tr>
+                  <td align="center" valign="top" style="font-family:Helvetica, Arial, sans-serif; font-size:13px;mso-line-height-rule:exactly;  line-height:16px;  color: #989898; padding: 0 20px 40px 20px;"  class="disclaimerPadding">
+                    Under&nbsp;Armour&reg;,&nbsp;Inc. 1&#65279;02&#65279;0&nbsp;H&#65279;ull&nbsp;St. Balt&#65279;imore,&nbsp;M&#65279;D&nbsp;2&#65279;1&#65279;2&#65279;3&#65279;0
+                    <br />
+                    &copy; %%=Format(Now(),"yyyy")=%% Under Armour&reg;, Inc. All&nbsp;Rights&nbsp;Reserved.
+                    <br />This email is an advertisement for Under&nbsp;Armour&reg;&nbsp;products.
+                  </td>
+                </tr>
+              </table>
+              %%[
+              elseif @country == "CAEN" then
+              ]%%
+              <table cellpadding="0" cellspacing="0" border="0" width="550" style="width:550px;" class="full-width">
+                <tr>
+                  <td align="center" valign="top" style="font-family:Helvetica, Arial, sans-serif; font-size:13px; mso-line-height-rule:exactly;  line-height:16px; color: #989898; padding: 0 20px 40px 20px;"  class="disclaimerPadding">
+                  You are receiving this email because we believe you have given us permission to contact you with news, information, and promotional offers. You may opt out of receiving these emails by clicking the &ldquo;Unsubscribe&rdquo; link. Please do not respond to this email as this email address is not&nbsp;monitored. <br /><br />
+                  
+                    <!--[if !mso]><!-->
+                   Under&nbsp;Armour&nbsp;Canada, U&#65279;L&#65279;C&nbsp;16&#65279;9&nbsp;E&#65279;nterpris&#65279;e&nbsp;B&#65279;lv&#65279;d, S&#65279;uite&nbsp;5&#65279;0&#65279;0, Un&#65279;ionvil&#65279;le, O&#65279;N&nbsp;&#65279;L6G&nbsp;0&#65279;E&#65279;7
+                    <!--<![endif]-->
+                   <!--[if gte mso 9]>
+                   
+                   Under&nbsp;Armour&nbsp;Canada, ULC&nbsp;169&nbsp;Enterprise&nbsp;Blvd, Suite&nbsp;500, Unionville, ON&nbsp;L6G&nbsp;0E7
+                   <![endif]-->
+                    <br />
+                    Copyright&copy; %%=Format(Now(),"yyyy")=%% Under&nbsp;Armour, Inc. All&nbsp;Rights&nbsp;Reserved.
+                    <br />Under&nbsp;Armour Canada ULC is sending this message on behalf of
+                    <br class="mobile-hide" />Under&nbsp;Armour, Inc. as an advertisement for Under&nbsp;Armour&nbsp;products.
+                    <br />10&#65279;20&nbsp;Hul&#65279;l&nbsp;St. Baltim&#65279;ore,&nbsp;M&#65279;D&nbsp;2&#65279;12&#65279;30
+                  </td>
+                </tr>
+              </table>
+              %%[
+              elseif @country == "CAFR" then
+              ]%%
+              <table cellpadding="0" cellspacing="0" border="0" width="550" style="width:550px;" class="full-width">
+                <tr>
+                  <td align="center" valign="top" style="font-family:Helvetica, Arial, sans-serif; font-size:13px; mso-line-height-rule:exactly;  line-height:16px; color: #989898; padding: 0 20px 40px 20px;"  class="disclaimerPadding">
+                  
+                  Vous recevez ce courriel car nous croyons que vous nous avez autoris&eacute; &agrave; vous contacter pour communiquer des nouvelles, de l&rsquo;information et des offres promotionnelles. Vous pouvez vous d&eacute;sinscrire et ne plus recevoir ces courriels en cliquant sur le lien &laquo; Se d&eacute;sabonner &raquo;. Veuillez ne pas r&eacute;pondre &agrave; ce courriel, cette adresse ne fait pas l&rsquo;objet&nbsp;d&rsquo;un&nbsp;suivi.  <br />
+                  <br />
+                   <!--[if !mso]><!-->
+                    Under&nbsp;Armour&nbsp;Canada, U&#65279;L&#65279;C&nbsp;1&#65279;6&#65279;9&nbsp;E&#65279;nterpris&#65279;e&nbsp;B&#65279;lv&#65279;d,  Suit&#65279;e&nbsp;5&#65279;0&#65279;0, Uni&#65279;onvill&#65279;e, O&#65279;N&nbsp;L&#65279;1&#65279;6&#65279;G&nbsp;0&#65279;1&#65279;E&#65279;7
+                    
+                     <!--<![endif]-->
+                   <!--[if gte mso 9]>
+                   
+                  Under&nbsp;Armour&nbsp;Canada, ULC&nbsp;169&nbsp;Enterprise&nbsp;Blvd, Suite&nbsp;500, Unionville, ON&nbsp;L16G&nbsp;01E7
+                   <![endif]-->
+                    <br />
+                    Copyright&copy; %%=Format(Now(),"yyyy")=%% Under&nbsp;Armour, Inc. Tous&nbsp;droits&nbsp;r&eacute;serv&eacute;s.
+                    <br />
+                    Under&nbsp;Armour Canada ULC vous envoie ce message au nom de Under&nbsp;Armour,&nbsp;Inc.
+                    <br />
+                    &agrave; titre de publicit&eacute; pour les produits Under&nbsp;Armour&reg;
+                    <br />
+                    10&#65279;20&nbsp;Hul&#65279;l&nbsp;St. Baltim&#65279;ore,&nbsp;M&#65279;D&nbsp;2&#65279;12&#65279;30
+                  </td>
+                </tr>
+              </table>
+              %%[endif]%%
+              %%[
+              if @country == "US" or @country == "CAEN" then
+              ]%%
+              <table cellpadding="0" cellspacing="0" border="0" width="550" style="width:550px;" class="full-width">
+                <tr>
+                  <td align="center" valign="top" style="font-family:Helvetica, Arial, sans-serif; font-size:12px; mso-line-height-rule:exactly;  line-height:14px; color: #ffffff; font-weight: bold;"  class="disclaimerPadding">
+                    %%[
+                    if @country == "CAEN" then
+                    ]%%
+                    Pour regarder ce courriel en fran&ccedil;ais, <a href="https://pages.emails.underarmour.com/CanadianLanguageUpdate/?mail=%%emailaddr%%&language=EN" target="_blank" alias="%%=v(@creativeversion)=%%_French Language Preference" style="color: #ffffff; text-decoration: underline;">cliquez&nbsp;ici</a>.
+                    <br />
+                    %%[endif]%%
+                    <a href="%%view_email_url%%" target="_blank" alias="%%=v(@creativeversion)=%%_View Online" style="color: #ffffff; text-decoration: none;">Web Version</a> &nbsp; | &nbsp; <a href="%%=RedirectTo(@privacy_policy_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Privacy Policy" style="color: #ffffff; text-decoration: none;">Privacy Policy</a> &nbsp; | &nbsp; <a href="%%=RedirectTo(@unsubscribe_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Unsubscribe Link" style="color: #ffffff; text-decoration: none;">Unsubscribe</a>
+                  </td>
+                </tr>
+              </table>
+              %%[
+              elseif @country == "CAFR" then
+              ]%%
+              <table cellpadding="0" cellspacing="0" border="0" width="550" style="width:550px;" class="full-width">
+                <tr>
+                  <td align="center" valign="top" style="font-family:Helvetica, Arial, sans-serif; font-size:12px;  mso-line-height-rule:exactly;  line-height:14px; color: #ffffff; font-weight: bold;">
+                    To change your language preference to English, <a href="https://pages.emails.underarmour.com/CanadianLanguageUpdate/?mail=%%emailaddr%%&language=FR" target="_blank" alias="%%=v(@creativeversion)=%%_English Language Preference" style="color: #ffffff; text-decoration: underline;">click&nbsp;here</a>.
+                    <br />
+                    <a href="%%view_email_url%%" target="_blank" alias="%%=v(@creativeversion)=%%_View Online" style="color: #ffffff; text-decoration: none;">Web&nbsp;Version</a> &nbsp; | &nbsp; <a href="%%=RedirectTo(@privacy_policy_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Privacy Policy" style="color: #ffffff; text-decoration: none;">Politique&nbsp;de&nbsp;confidentialit&eacute;</a> &nbsp; | &nbsp; <a href="%%=RedirectTo(@unsubscribe_url)=%%" target="_blank" alias="%%=v(@creativeversion)=%%_Unsubscribe Link" style="color: #ffffff; text-decoration: none;">Se&nbsp;d&eacute;sabonner</a>
+                  </td>
+                </tr>
+              </table>
+              %%[endif]%%
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
